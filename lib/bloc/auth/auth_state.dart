@@ -1,10 +1,27 @@
 part of 'auth_bloc.dart';
 
-sealed class AuthState extends Equatable {
+abstract class AuthState extends Equatable {
   const AuthState();
   
   @override
   List<Object> get props => [];
 }
 
-final class AuthInitial extends AuthState {}
+// belum terotentikasi
+class AuthUninitialized extends AuthState{}
+
+// sukses otenti
+class AuthAuthenticated extends AuthState{
+  final Pengguna pengguna;
+
+  const AuthAuthenticated({required this.pengguna});
+
+  @override
+  List<Object> get props => [pengguna];
+}
+
+// Tidak otenti (setelah logout atau gagal)
+class AuthUnauthenticated extends AuthState{}
+
+// saat loading (proses login)
+class AuthLoading extends AuthState{}
