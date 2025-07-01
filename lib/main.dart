@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gesturku_app/repositories/kategori_repository.dart';
+import 'package:gesturku_app/repositories/materi_repository.dart';
 import 'bloc/auth/auth_bloc.dart';
 import 'repositories/auth_repository.dart';
 import 'ui/admin/admin_home_page.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
       providers: [
         RepositoryProvider(create: (context) => AuthRepository()),
         RepositoryProvider(create: (context) => KategoriRepository()),
+        RepositoryProvider(create: (context) => MateriRepository(),)
       ],
       child: BlocProvider(
         create: (context) => AuthBloc(
