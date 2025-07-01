@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gesturku_app/repositories/kategori_repository.dart';
 import 'bloc/auth/auth_bloc.dart';
 import 'repositories/auth_repository.dart';
 import 'ui/admin/admin_home_page.dart';
-import 'ui/learner/pages/beranda_page.dart';
+import 'ui/learner/main_learner_page.dart'; // <-- GANTI INI
 import 'ui/login/login_page.dart';
-import 'ui/splash_screen.dart'; // Kita buat splash screen sederhana
+import 'ui/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,13 +17,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Menyediakan AuthRepository dan AuthBloc ke seluruh aplikasi
-    return RepositoryProvider(
-      create: (context) => AuthRepository(),
+    // Menyediakan semua repository di tingkat atas
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(create: (context) => AuthRepository()),
+        RepositoryProvider(create: (context) => KategoriRepository()),
+      ],
       child: BlocProvider(
         create: (context) => AuthBloc(
           authRepository: RepositoryProvider.of<AuthRepository>(context),
-        )..add(AppStarted()), // Langsung jalankan event AppStarted
+        )..add(AppStarted()),
         child: MaterialApp(
           title: 'Gesturku',
           theme: ThemeData(
@@ -41,17 +45,15 @@ class AppRouter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // BlocBuilder akan "membangun ulang" widget berdasarkan state AuthBloc
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is AuthUninitialized) {
-          return const SplashScreen(); // Tampilkan splash screen saat inisialisasi
+          return const SplashScreen();
         } else if (state is AuthAuthenticated) {
-          // Logika Navigasi Berbasis Peran
           if (state.pengguna.role == 'admin') {
             return const AdminHomePage();
           } else {
-            return const BerandaPage();
+            return const MainLearnerPage(); // <-- UBAH INI
           }
         } else if (state is AuthUnauthenticated) {
           return const LoginPage();
@@ -60,7 +62,7 @@ class AppRouter extends StatelessWidget {
             body: Center(child: CircularProgressIndicator()),
           );
         }
-        return const SplashScreen(); // Default fallback
+        return const SplashScreen();
       },
     );
   }
