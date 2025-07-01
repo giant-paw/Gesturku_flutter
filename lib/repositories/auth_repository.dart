@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/pengguna.dart';
 
 class AuthRepository {
-  final _baseUrl = 'http://127.0.0.1:8000/api';
+  final _baseUrl = 'http://10.0.2.2:8000/api';
   final _storage = const FlutterSecureStorage();
 
   Future<Map<String, dynamic>> login(String email, String password) async {
