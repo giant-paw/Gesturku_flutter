@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gesturku_app/ui/learner/pages/materi_list_page.dart';
 import '../../../bloc/kategori/kategori_bloc.dart';
 import '../../../repositories/kategori_repository.dart';
 
@@ -50,7 +51,15 @@ class BerandaPage extends StatelessWidget {
                     ),
                     child: InkWell(
                       onTap: () {
-                        print('Tapped on ${kategori.nama} dengan ID: ${kategori.id}');
+                        Navigator.push(
+                          context, 
+                          MaterialPageRoute(
+                            builder: (context) => MateriListPage(
+                              kategoriId: kategori.id, 
+                              kategoriNama: kategori.nama
+                            ),
+                          ),
+                        );
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -63,8 +72,7 @@ class BerandaPage extends StatelessWidget {
                                 return progress == null ? child : const Center(child: CircularProgressIndicator());
                               },
                               errorBuilder: (context, error, stackTrace) {
-                                // Jika ini yang muncul, artinya URL gambar salah atau server tidak terjangkau
-                                print('Error memuat gambar: $error'); // Tambahkan print untuk debug
+                                print('Error memuat gambar: $error'); 
                                 return const Icon(Icons.image_not_supported, size: 50, color: Colors.grey);
                               },
                             ),
@@ -87,7 +95,6 @@ class BerandaPage extends StatelessWidget {
                 },
               );
             }
-            // Tampilkan pesan error jika gagal
             else if (state is KategoriError) {
               return Center(child: Text('Terjadi kesalahan: ${state.message}'));
             }
