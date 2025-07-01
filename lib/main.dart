@@ -51,7 +51,7 @@ class AppRouter extends StatelessWidget {
           if (state.pengguna.role == 'admin') {
             return const AdminHomePage();
           } else {
-            return const LearnerHomePage();
+            return const BerandaPage();
           }
         } else if (state is AuthUnauthenticated) {
           return const LoginPage();
