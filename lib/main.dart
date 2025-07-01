@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/auth/auth_bloc.dart';
 import 'repositories/auth_repository.dart';
 import 'ui/admin/admin_home_page.dart';
-import 'ui/learner/learner_home_page.dart';
+import 'ui/learner/pages/beranda_page.dart';
 import 'ui/login/login_page.dart';
 import 'ui/splash_screen.dart'; // Kita buat splash screen sederhana
 
