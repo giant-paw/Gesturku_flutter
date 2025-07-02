@@ -20,5 +20,22 @@ class LoggedIn extends AuthEvent {
   List<Object> get props => [email, password];
 }
 
+class RegisterButtonPressed extends AuthEvent {
+  final String nama;
+  final String email;
+  final String password;
+  final String passwordConfirmation;
+  final XFile? fotoProfil;
+
+  const RegisterButtonPressed({
+    required this.nama,
+    required this.email,
+    required this.password,
+    required this.passwordConfirmation,
+    this.fotoProfil,
+  });
+}
+
+
 // Event logout di pencet
 class LoggedOut extends AuthEvent{}
