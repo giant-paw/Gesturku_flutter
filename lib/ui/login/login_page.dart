@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gesturku_app/ui/register/register_page.dart';
 import '../../bloc/auth/auth_bloc.dart';
 
 class LoginPage extends StatelessWidget {
@@ -19,7 +20,9 @@ class LoginPage extends StatelessWidget {
               ..hideCurrentSnackBar() // Sembunyikan notifikasi lama jika ada
               ..showSnackBar(
                 const SnackBar(
-                  content: Text('Login Gagal! Periksa email, password, atau koneksi internet Anda.'),
+                  content: Text(
+                    'Login Gagal! Periksa email, password, atau koneksi internet Anda.',
+                  ),
                   backgroundColor: Colors.red,
                 ),
               );
@@ -43,7 +46,7 @@ class LoginPage extends StatelessWidget {
                   obscureText: true,
                 ),
                 const SizedBox(height: 32),
-                
+
                 // Jika state sedang loading, tampilkan indikator putar-putar.
                 // Jika tidak, tampilkan tombol login.
                 if (state is AuthLoading)
@@ -51,19 +54,36 @@ class LoginPage extends StatelessWidget {
                 else
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 15,
+                      ),
                     ),
                     onPressed: () {
                       // Ambil BLoC dari context
                       final authBloc = BlocProvider.of<AuthBloc>(context);
                       // Kirim event LoggedIn dengan data dari text field
-                      authBloc.add(LoggedIn(
-                        email: emailController.text.trim(),
-                        password: passwordController.text,
-                      ));
+                      authBloc.add(
+                        LoggedIn(
+                          email: emailController.text.trim(),
+                          password: passwordController.text,
+                        ),
+                      );
                     },
                     child: const Text('Login'),
                   ),
+
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RegisterPage(),
+                      ),
+                    );
+                  },
+                  child: const Text('Belum punya akun? Daftar di sini'),
+                ),
               ],
             ),
           );
