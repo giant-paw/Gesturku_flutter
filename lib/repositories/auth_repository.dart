@@ -69,6 +69,21 @@ class AuthRepository {
     }
   }
 
+  Future<int> getRingkasanProgres() async {
+    final token = await _storage.read(key: 'auth_token');
+    final response = await http.get(
+      Uri.parse('$_baseUrl/profil/progres'),
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data['total_selesai'];
+    } else {
+      throw Exception('Gagal memuat ringkasan progres.');
+    }
+  }
+
   Future<void> logout() async {
     final token = await _storage.read(key: 'auth_token');
     await http.post(
