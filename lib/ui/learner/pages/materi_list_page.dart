@@ -33,7 +33,6 @@ class MateriListPage extends StatelessWidget {
                   child: Text('Belum ada materi di kategori ini.'),
                 );
               }
-              // Jika ada materi, tampilkan sebagai daftar
               return ListView.builder(
                 itemCount: state.materi.length,
                 itemBuilder: (context, index) {
@@ -43,15 +42,27 @@ class MateriListPage extends StatelessWidget {
                     title: Text(materi.nama),
                     onTap: () {
                       Navigator.push(
-                        context,
+                        context, 
                         MaterialPageRoute(
-                          builder:
-                              (context) => MateriDetailPage(
-                                materi: materi,
-                              ),
-                        ),
+                          builder: (_) => BlocProvider.value(
+                            value: BlocProvider.of<MateriBloc>(context),
+                            child: MateriDetailPage(materi: materi),
+                          )
+                        )
                       );
                     },
+                    
+                    // onTap: () {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder:
+                    //           (context) => MateriDetailPage(
+                    //             materi: materi,
+                    //           ),
+                    //     ),
+                    //   );
+                    // },
                   );
                 },
               );
