@@ -22,9 +22,9 @@ class DeteksiBloc extends Bloc<DeteksiEvent, DeteksiState> {
       String hurufTerdeteksi = hasil['detections'][0]['class_name'];
 
       if (hurufTerdeteksi.toLowerCase() == event.materiYangDipelajari.toLowerCase().replaceAll('huruf ', '')) {
-        // Jika berhasil, kirim juga URL gambar hasil dan nama kelasnya
         emit(DeteksiSukses(
-          resultImageUrl: hasil['result_image_url'],
+          // Ambil data base64 dari JSON
+          resultImageBase64: hasil['result_image_base64'],
           detectedClassName: hurufTerdeteksi,
         ));
       } else {

@@ -10,16 +10,16 @@ class DeteksiInitial extends DeteksiState {}
 class DeteksiLoading extends DeteksiState {}
 
 class DeteksiSukses extends DeteksiState {
-  final String resultImageUrl;
+  final String? resultImageBase64;
   final String detectedClassName;
 
   const DeteksiSukses({
-    required this.resultImageUrl,
+    this.resultImageBase64,
     required this.detectedClassName,
   });
 
   @override
-  List<Object> get props => [resultImageUrl, detectedClassName];
+  List<Object> get props => [resultImageBase64 ?? '', detectedClassName];
 }
 
 class DeteksiGagal extends DeteksiState {

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -39,20 +41,16 @@ class MateriDetailPage extends StatelessWidget {
                       children: [
                         Text('Gestur Anda terdeteksi sebagai "${state.detectedClassName}" dan sudah benar.'),
                         const SizedBox(height: 16),
-                        Image.network(
-                          state.resultImageUrl,
-                          loadingBuilder: (context, child, progress) {
-                            return progress == null
-                                ? child
-                                : const CircularProgressIndicator();
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Text('Gagal memuat gambar hasil.', style: TextStyle(color: Colors.red));
-                          },
-                        ),
+                        
+                        if (state.resultImageBase64 != null)
+                          Image.memory(
+                            base64Decode(state.resultImageBase64!),
+                          )
+                        else
+                          const Text('Tidak ada gambar hasil.'),
                       ],
                     ),
-                  ),
+                  ),  
                   actions: <Widget>[
                     TextButton(
                       child: const Text('Lanjut Belajar'),
