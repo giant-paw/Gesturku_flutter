@@ -41,7 +41,7 @@ class BerandaPage extends StatelessWidget {
                   const String baseUrl = 'http://10.0.2.2:8000'; 
 
                   // Alamat lengkap untuk gambar
-                  final String imageUrl = '$baseUrl/api/files/${kategori.urlGambar}';
+                  final String imageUrl = '$baseUrl/files/${kategori.urlGambar}';
 
                   return Card(
                     clipBehavior: Clip.antiAlias,
