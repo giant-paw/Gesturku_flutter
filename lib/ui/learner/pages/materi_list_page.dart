@@ -37,32 +37,57 @@ class MateriListPage extends StatelessWidget {
                 itemCount: state.materi.length,
                 itemBuilder: (context, index) {
                   final materi = state.materi[index];
+                  final bool isLocked =
+                      !materi.isUnlocked; 
+
                   return ListTile(
-                    leading: const Icon(Icons.video_library_outlined),
-                    title: Text(materi.nama),
-                    onTap: () {
-                      Navigator.push(
-                        context, 
-                        MaterialPageRoute(
-                          builder: (_) => BlocProvider.value(
-                            value: BlocProvider.of<MateriBloc>(context),
-                            child: MateriDetailPage(materi: materi),
-                          )
-                        )
-                      );
-                    },
-                    
-                    // onTap: () {
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder:
-                    //           (context) => MateriDetailPage(
-                    //             materi: materi,
-                    //           ),
-                    //     ),
-                    //   );
-                    // },
+                    leading: Icon(
+                      materi.isCompleted
+                          ? Icons.check_circle
+                          : Icons.video_library_outlined,
+                      color:
+                          isLocked
+                              ? Colors.grey.shade400
+                              : (materi.isCompleted
+                                  ? Colors.green
+                                  : Theme.of(context).primaryColor),
+                    ),
+                    title: Text(
+                      materi.nama,
+                      style: TextStyle(
+                        decoration:
+                            materi.isCompleted
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                        color: isLocked ? Colors.grey.shade400 : null,
+                      ),
+                    ),
+                    trailing:
+                        isLocked
+                            ? const Icon(Icons.lock, color: Colors.grey)
+                            : (materi.isCompleted
+                                ? const Icon(
+                                  Icons.check_circle,
+                                  color: Colors.green,
+                                )
+                                : const Icon(Icons.chevron_right)),
+                    onTap:
+                        isLocked
+                            ? null
+                            : () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (_) => BlocProvider.value(
+                                        value: BlocProvider.of<MateriBloc>(
+                                          context,
+                                        ),
+                                        child: MateriDetailPage(materi: materi),
+                                      ),
+                                ),
+                              );
+                            },
                   );
                 },
               );

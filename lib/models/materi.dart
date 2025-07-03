@@ -6,6 +6,8 @@ class Materi extends Equatable {
   final String? deskripsi;
   final String? urlVideo;
   final String? urlGambar;
+  final bool isCompleted;
+  final bool isUnlocked;
 
   const Materi({
     required this.id,
@@ -13,6 +15,8 @@ class Materi extends Equatable {
     this.deskripsi,
     this.urlVideo,
     this.urlGambar,
+    this.isCompleted = false,
+    this.isUnlocked = false,
   });
 
   factory Materi.fromJson(Map<String, dynamic> json) {
@@ -22,9 +26,11 @@ class Materi extends Equatable {
       deskripsi: json['deskripsi'],
       urlVideo: json['url_video'],
       urlGambar: json['url_gambar'],
+      isCompleted: json['is_completed'] ?? false,
+      isUnlocked: json['is_unlocked'] ?? false,
     );
   }
 
   @override
-  List<Object?> get props => [id, nama, deskripsi, urlVideo, urlGambar];
+  List<Object?> get props => [id, nama, deskripsi, urlVideo, urlGambar, isCompleted, isUnlocked];
 }

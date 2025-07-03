@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gesturku_app/repositories/deteksi_repository.dart';
 import 'package:gesturku_app/repositories/kategori_repository.dart';
+import 'package:gesturku_app/repositories/leaderboard_repository.dart';
 import 'package:gesturku_app/repositories/materi_repository.dart';
 import 'package:gesturku_app/repositories/riwayat_belajar_repository.dart';
 import 'bloc/auth/auth_bloc.dart';
@@ -28,6 +29,8 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(create: (context) => MateriRepository(),),
         RepositoryProvider(create: (context) => DeteksiRepository()), 
         RepositoryProvider(create: (context) => RiwayatBelajarRepository()), 
+
+        RepositoryProvider(create: (context) => LeaderboardRepository()),
       ],
       child: BlocProvider(
         create: (context) => AuthBloc(
@@ -59,7 +62,7 @@ class AppRouter extends StatelessWidget {
           if (state.pengguna.role == 'admin') {
             return const AdminHomePage();
           } else {
-            return const MainLearnerPage(); // <-- UBAH INI
+            return const MainLearnerPage();
           }
         } else if (state is AuthUnauthenticated) {
           return const LoginPage();
