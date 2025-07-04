@@ -84,13 +84,42 @@ class AuthRepository {
     }
   }
 
+  Future<Pengguna> updateProfil({String? nama, XFile? fotoProfil}) async {
+    final token = await _storage.read(key: 'auth_token');
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('$_baseUrl/profil/update'),
+    );
+
+    request.headers['Authorization'] = 'Bearer $token';
+    request.headers['Accept'] = 'application/json';
+
+    if (nama != null && nama.isNotEmpty) {
+      request.fields['nama'] = nama;
+    }
+    if (fotoProfil != null) {
+      request.files.add(
+        await http.MultipartFile.fromPath('foto_profil', fotoProfil.path),
+      );
+    }
+
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return Pengguna.fromJson(data['user']);
+    } else {
+      throw Exception('Gagal memperbarui profil.');
+    }
+  }
+
   Future<void> logout() async {
     final token = await _storage.read(key: 'auth_token');
     await http.post(
       Uri.parse('$_baseUrl/logout'),
       headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
     );
-    // Hapus token dari storage
     await _storage.delete(key: 'auth_token');
   }
 
