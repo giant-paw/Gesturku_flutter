@@ -36,6 +36,11 @@ class RegisterButtonPressed extends AuthEvent {
   });
 }
 
+class UpdateProfil extends AuthEvent {
+  final String? nama;
+  final XFile? fotoProfil;
+  const UpdateProfil({this.nama, this.fotoProfil});
+}
 
 // Event logout di pencet
-class LoggedOut extends AuthEvent{}
+class LoggedOut extends AuthEvent {}

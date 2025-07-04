@@ -15,6 +15,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoggedIn>(_onLoggedIn);
     on<LoggedOut>(_onLoggedOut);
     on<RegisterButtonPressed>(_onRegisterButtonPressed);
+
+    on<UpdateProfil>(_onUpdateProfil);
   }
 
   void _onAppStarted(AppStarted event, Emitter<AuthState> emit) async {
@@ -37,20 +39,35 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  void _onRegisterButtonPressed(RegisterButtonPressed event, Emitter<AuthState> emit) async {
-  emit(AuthLoading());
+  void _onRegisterButtonPressed(
+    RegisterButtonPressed event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoading());
+    try {
+      final result = await authRepository.register(
+        nama: event.nama,
+        email: event.email,
+        password: event.password,
+        passwordConfirmation: event.passwordConfirmation,
+        fotoProfil: event.fotoProfil,
+      );
+      final Pengguna pengguna = result['user'];
+      emit(AuthAuthenticated(pengguna: pengguna));
+    } catch (e) {
+      emit(AuthUnauthenticated());
+    }
+  }
+
+  void _onUpdateProfil(UpdateProfil event, Emitter<AuthState> emit) async {
   try {
-    final result = await authRepository.register(
+    final updatedPengguna = await authRepository.updateProfil(
       nama: event.nama,
-      email: event.email,
-      password: event.password,
-      passwordConfirmation: event.passwordConfirmation,
       fotoProfil: event.fotoProfil,
     );
-    final Pengguna pengguna = result['user'];
-    emit(AuthAuthenticated(pengguna: pengguna));
+    emit(AuthAuthenticated(pengguna: updatedPengguna));
   } catch (e) {
-    emit(AuthUnauthenticated()); 
+    print('Gagal update profil: $e');
   }
 }
 
