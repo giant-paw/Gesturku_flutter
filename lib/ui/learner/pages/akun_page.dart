@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gesturku_app/ui/learner/pages/edit_profil_page.dart'; // Pastikan path import ini benar
 import '../../../bloc/akun/akun_bloc.dart';
 import '../../../bloc/auth/auth_bloc.dart';
-import '../../../models/pengguna.dart';
 import '../../../repositories/auth_repository.dart';
 
 class AkunPage extends StatelessWidget {
@@ -14,27 +14,36 @@ class AkunPage extends StatelessWidget {
       create: (context) => AkunBloc(
         authRepository: RepositoryProvider.of<AuthRepository>(context),
       )..add(FetchAkunData()),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Profil Saya'),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
-        ),
-        // Gunakan BlocBuilder untuk AuthBloc agar kita mendapatkan data pengguna dengan aman
-        body: BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, authState) {
-            // Hanya bangun UI jika state-nya adalah AuthAuthenticated
-            if (authState is AuthAuthenticated) {
-              final pengguna = authState.pengguna;
+      child: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, authState) {
+          if (authState is AuthAuthenticated) {
+            final pengguna = authState.pengguna;
 
-              return ListView(
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text('Profil Saya'),
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.edit_outlined),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => EditProfilPage(pengguna: pengguna),
+                        ),
+                      );
+                    },
+                  )
+                ],
+              ),
+              body: ListView(
                 padding: const EdgeInsets.all(16.0),
                 children: [
-                  // --- Bagian Header Profil ---
                   Column(
                     children: [
-                      // Gunakan pengecekan yang sudah benar
                       if (pengguna.pathFotoProfil != null && pengguna.pathFotoProfil!.isNotEmpty)
                         CircleAvatar(
                           radius: 50,
@@ -48,7 +57,6 @@ class AkunPage extends StatelessWidget {
                           backgroundColor: Colors.blue,
                           child: Icon(Icons.person, size: 50, color: Colors.white),
                         ),
-
                       const SizedBox(height: 16),
                       Text(
                         pengguna.nama,
@@ -64,7 +72,6 @@ class AkunPage extends StatelessWidget {
                   const Divider(),
                   const SizedBox(height: 16),
 
-                  // --- Bagian Ringkasan Progres ---
                   const Text(
                     'Ringkasan Belajar',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -106,7 +113,6 @@ class AkunPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
 
-                  // --- Bagian Tombol Logout ---
                   ListTile(
                     leading: const Icon(Icons.logout, color: Colors.red),
                     title: const Text('Logout', style: TextStyle(color: Colors.red)),
@@ -124,7 +130,7 @@ class AkunPage extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 context.read<AuthBloc>().add(LoggedOut());
-                                Navigator.of(dialogContext).pop();
+                                Navigator.of(context).popUntil((route) => route.isFirst);
                               },
                               child: const Text('Ya, Keluar', style: TextStyle(color: Colors.red)),
                             ),
@@ -134,13 +140,14 @@ class AkunPage extends StatelessWidget {
                     },
                   ),
                 ],
-              );
-            }
+              ),
+            );
+          }
 
-            // Jika state bukan AuthAuthenticated (misalnya saat proses logout), tampilkan loading
-            return const Center(child: CircularProgressIndicator());
-          },
-        ),
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        },
       ),
     );
   }

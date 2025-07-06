@@ -173,8 +173,12 @@ class _MateriDetailViewState extends State<MateriDetailView> {
   @override
   void initState() {
     super.initState();
-    if (widget.materi.urlVideo != null) {
+    if (widget.materi.urlVideo != null && widget.materi.urlVideo!.isNotEmpty) {
       final videoUrl = 'http://10.0.2.2:8000/files/${widget.materi.urlVideo}';
+
+      // COBA DI DEBUG BANG
+      print('URL Video yang diakses: $videoUrl'); 
+
       _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl))
         ..initialize().then((_) {
           if (mounted) {
