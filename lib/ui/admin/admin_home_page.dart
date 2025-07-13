@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gesturku_app/ui/admin/pages/kelola_kategori_page.dart';
 import 'package:gesturku_app/ui/admin/pages/kelola_materi_page.dart';
+import 'package:gesturku_app/ui/admin/pages/leaderboard_page.dart';
 import '../../bloc/auth/auth_bloc.dart';
 
 class AdminHomePage extends StatelessWidget {
@@ -110,7 +111,12 @@ class AdminHomePage extends StatelessWidget {
               subtitle: const Text('Lihat daftar pengguna dan progresnya'),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                print('Masuk ke halaman Lihat Pengguna');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LeaderboardPage(),
+                  ),
+                );
               },
             ),
           ),
