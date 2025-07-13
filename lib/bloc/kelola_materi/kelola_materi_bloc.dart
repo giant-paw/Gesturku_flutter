@@ -12,6 +12,7 @@ class KelolaMateriBloc extends Bloc<KelolaMateriEvent, KelolaMateriState> {
   KelolaMateriBloc({required this.materiRepository})
     : super(KelolaMateriInitial()) {
     on<FetchAllMateri>(_onFetchAllMateri);
+    on<DeleteMateri>(_onDeleteMateri); 
   }
 
   void _onFetchAllMateri(
@@ -24,6 +25,15 @@ class KelolaMateriBloc extends Bloc<KelolaMateriEvent, KelolaMateriState> {
       emit(KelolaMateriLoaded(materi: materiList));
     } catch (e) {
       emit(KelolaMateriError(message: e.toString()));
+    }
+  }
+
+  void _onDeleteMateri(DeleteMateri event, Emitter<KelolaMateriState> emit) async {
+    try {
+      await materiRepository.deleteMateri(event.materiId);
+      add(FetchAllMateri());
+    } catch (e) {
+      emit(KelolaMateriError(message: 'Gagal menghapus materi: ${e.toString()}'));
     }
   }
 }

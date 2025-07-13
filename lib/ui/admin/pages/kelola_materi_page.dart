@@ -47,7 +47,43 @@ class KelolaMateriPage extends StatelessWidget {
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: () {},
+                            onPressed: () {
+                              // Tampilkan dialog konfirmasi
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext dialogContext) {
+                                  return AlertDialog(
+                                    title: const Text('Konfirmasi Hapus'),
+                                    content: Text(
+                                      'Apakah Anda yakin ingin menghapus materi "${materi.nama}"?',
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: const Text('Batal'),
+                                        onPressed:
+                                            () =>
+                                                Navigator.of(
+                                                  dialogContext,
+                                                ).pop(),
+                                      ),
+                                      TextButton(
+                                        child: const Text(
+                                          'Ya, Hapus',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                        onPressed: () {
+                                          // Kirim event DeleteMateri ke BLoC
+                                          context.read<KelolaMateriBloc>().add(
+                                            DeleteMateri(materiId: materi.id),
+                                          );
+                                          Navigator.of(dialogContext).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
                           ),
                         ],
                       ),

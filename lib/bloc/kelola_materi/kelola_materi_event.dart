@@ -6,4 +6,11 @@ abstract class KelolaMateriEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class DeleteMateri extends KelolaMateriEvent {
+  final int materiId;
+  const DeleteMateri({required this.materiId});
+  @override
+  List<Object> get props => [materiId];
+}
+
 class FetchAllMateri extends KelolaMateriEvent {}

@@ -68,4 +68,17 @@ class MateriRepository {
       throw Exception('Gagal menambah materi baru: $responseBody');
     }
   }
+
+  Future<void> deleteMateri(int materiId) async {
+    final token = await _storage.read(key: 'auth_token');
+    final response = await http.delete(
+      Uri.parse('$_baseUrl/materi/$materiId'), // Panggil endpoint DELETE
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode != 200) {
+      // Status sukses untuk delete biasanya 200 atau 204
+      throw Exception('Gagal menghapus materi.');
+    }
+  }
 }
