@@ -81,4 +81,40 @@ class MateriRepository {
       throw Exception('Gagal menghapus materi.');
     }
   }
+
+  Future<void> updateMateri({
+    required int materiId,
+    required String nama,
+    required int kategoriId,
+    required String deskripsi,
+    required int urutan,
+    XFile? file, 
+  }) async {
+    final token = await _storage.read(key: 'auth_token');
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('$_baseUrl/materi/$materiId'),
+    );
+
+    request.headers['Authorization'] = 'Bearer $token';
+    request.headers['Accept'] = 'application/json';
+
+    request.fields['_method'] = 'PUT';
+
+    request.fields['nama'] = nama;
+    request.fields['kategori_id'] = kategoriId.toString();
+    request.fields['deskripsi'] = deskripsi;
+    request.fields['urutan'] = urutan.toString();
+
+    if (file != null) {
+      request.files.add(await http.MultipartFile.fromPath('file', file.path));
+    }
+
+    final response = await request.send();
+
+    if (response.statusCode != 200) {
+      final responseBody = await response.stream.bytesToString();
+      throw Exception('Gagal memperbarui materi: $responseBody');
+    }
+  }
 }

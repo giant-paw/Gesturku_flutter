@@ -7,6 +7,7 @@ class Materi extends Equatable {
   final String? deskripsi;
   final String? urlVideo;
   final String? urlGambar;
+  final int urutan;
   final bool isCompleted;
   final bool isUnlocked;
   final Kategori? kategori;
@@ -17,6 +18,7 @@ class Materi extends Equatable {
     this.deskripsi,
     this.urlVideo,
     this.urlGambar,
+    required this.urutan,
     this.isCompleted = false,
     this.isUnlocked = false,
     this.kategori,
@@ -29,6 +31,7 @@ class Materi extends Equatable {
       deskripsi: json['deskripsi'],
       urlVideo: json['url_video'],
       urlGambar: json['url_gambar'],
+      urutan: json['urutan'] ?? 0,
       isCompleted: json['is_completed'] ?? false,
       isUnlocked: json['is_unlocked'] ?? false,
       kategori: json['kategori'] != null ? Kategori.fromJson(json['kategori']) : null,

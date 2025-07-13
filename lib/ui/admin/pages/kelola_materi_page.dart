@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gesturku_app/ui/admin/pages/edit_materi_page.dart';
 import 'package:gesturku_app/ui/admin/pages/tambah_materi_page.dart';
 import '../../../bloc/kelola_materi/kelola_materi_bloc.dart';
 import '../../../repositories/materi_repository.dart';
@@ -43,7 +44,22 @@ class KelolaMateriPage extends StatelessWidget {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.edit, color: Colors.blue),
-                            onPressed: () {},
+                            onPressed: () async {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) =>
+                                          EditMateriPage(materiToEdit: materi),
+                                ),
+                              );
+
+                              if (result == true) {
+                                context.read<KelolaMateriBloc>().add(
+                                  FetchAllMateri(),
+                                );
+                              }
+                            },
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete, color: Colors.red),
@@ -72,7 +88,6 @@ class KelolaMateriPage extends StatelessWidget {
                                           style: TextStyle(color: Colors.red),
                                         ),
                                         onPressed: () {
-                                          // Kirim event DeleteMateri ke BLoC
                                           context.read<KelolaMateriBloc>().add(
                                             DeleteMateri(materiId: materi.id),
                                           );
