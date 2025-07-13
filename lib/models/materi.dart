@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'kategori.dart';
 
 class Materi extends Equatable {
   final int id;
@@ -8,6 +9,7 @@ class Materi extends Equatable {
   final String? urlGambar;
   final bool isCompleted;
   final bool isUnlocked;
+  final Kategori? kategori;
 
   const Materi({
     required this.id,
@@ -17,6 +19,7 @@ class Materi extends Equatable {
     this.urlGambar,
     this.isCompleted = false,
     this.isUnlocked = false,
+    this.kategori,
   });
 
   factory Materi.fromJson(Map<String, dynamic> json) {
@@ -28,6 +31,7 @@ class Materi extends Equatable {
       urlGambar: json['url_gambar'],
       isCompleted: json['is_completed'] ?? false,
       isUnlocked: json['is_unlocked'] ?? false,
+      kategori: json['kategori'] != null ? Kategori.fromJson(json['kategori']) : null,
     );
   }
 

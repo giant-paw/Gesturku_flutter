@@ -12,10 +12,7 @@ class MateriRepository {
 
     final response = await http.get(
       Uri.parse('$_baseUrl/kategori/$kategoriId/materi'),
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
     if (response.statusCode == 200) {
@@ -23,6 +20,23 @@ class MateriRepository {
       return data.map((json) => Materi.fromJson(json)).toList();
     } else {
       throw Exception('Gagal memuat daftar materi.');
+    }
+  }
+
+  Future<List<Materi>> fetchAllMateriForAdmin() async {
+    final token = await _storage.read(key: 'auth_token');
+    if (token == null) throw Exception('Token tidak ditemukan');
+
+    final response = await http.get(
+      Uri.parse('$_baseUrl/admin/materi'), 
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data.map((json) => Materi.fromJson(json)).toList();
+    } else {
+      throw Exception('Gagal memuat semua materi untuk admin.');
     }
   }
 }
