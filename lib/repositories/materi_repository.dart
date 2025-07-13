@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import '../models/materi.dart';
 
 class MateriRepository {
@@ -28,7 +29,7 @@ class MateriRepository {
     if (token == null) throw Exception('Token tidak ditemukan');
 
     final response = await http.get(
-      Uri.parse('$_baseUrl/admin/materi'), 
+      Uri.parse('$_baseUrl/admin/materi'),
       headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
@@ -37,6 +38,34 @@ class MateriRepository {
       return data.map((json) => Materi.fromJson(json)).toList();
     } else {
       throw Exception('Gagal memuat semua materi untuk admin.');
+    }
+  }
+
+  Future<void> tambahMateriBaru({
+    required String nama,
+    required int kategoriId,
+    required String deskripsi,
+    required int urutan,
+    required XFile file,
+  }) async {
+    final token = await _storage.read(key: 'auth_token');
+    var request = http.MultipartRequest('POST', Uri.parse('$_baseUrl/materi'));
+
+    request.headers['Authorization'] = 'Bearer $token';
+    request.headers['Accept'] = 'application/json';
+
+    request.fields['nama'] = nama;
+    request.fields['kategori_id'] = kategoriId.toString();
+    request.fields['deskripsi'] = deskripsi;
+    request.fields['urutan'] = urutan.toString();
+    request.files.add(await http.MultipartFile.fromPath('file', file.path));
+
+    final response = await request.send();
+
+    if (response.statusCode != 201) {
+      // Coba baca respons error jika ada
+      final responseBody = await response.stream.bytesToString();
+      throw Exception('Gagal menambah materi baru: $responseBody');
     }
   }
 }

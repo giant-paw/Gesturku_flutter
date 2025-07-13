@@ -62,11 +62,15 @@ class KelolaMateriPage extends StatelessWidget {
           },
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
+          onPressed: () async {
+            final result = await Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const TambahMateriPage()),
             );
+
+            if (result == true && context.mounted) {
+              context.read<KelolaMateriBloc>().add(FetchAllMateri());
+            }
           },
           child: const Icon(Icons.add),
         ),
