@@ -5,12 +5,14 @@ class Kategori extends Equatable{
   final String nama;
   final String? deskripsi;
   final String? urlGambar;
+  final int urutan;
 
   const Kategori({
     required this.id,
     required this.nama,
     this.deskripsi,
     this.urlGambar,
+    required this.urutan,
   });
 
   factory Kategori.fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,7 @@ class Kategori extends Equatable{
       nama: json['nama'],
       deskripsi: json['deskripsi'],
       urlGambar: json['url_gambar'],
+      urutan: json['urutan'] ?? 0,
     );
   }
 

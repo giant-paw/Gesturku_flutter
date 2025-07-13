@@ -1,10 +1,23 @@
 part of 'edit_kategori_bloc.dart';
 
-sealed class EditKategoriState extends Equatable {
+abstract class EditKategoriState extends Equatable {
   const EditKategoriState();
-  
+
   @override
   List<Object> get props => [];
 }
 
-final class EditKategoriInitial extends EditKategoriState {}
+class EditKategoriInitial extends EditKategoriState {}
+
+class EditKategoriLoading extends EditKategoriState {}
+
+class EditKategoriSukses extends EditKategoriState {}
+
+class EditKategoriError extends EditKategoriState {
+  final String message;
+
+  const EditKategoriError({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}

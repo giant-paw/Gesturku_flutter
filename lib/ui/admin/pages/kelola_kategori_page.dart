@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gesturku_app/ui/admin/pages/edit_kategori_page.dart';
+import 'package:gesturku_app/ui/admin/pages/tambah_kategori_page.dart';
 import '../../../bloc/kategori/kategori_bloc.dart';
 import '../../../repositories/kategori_repository.dart';
 
@@ -36,8 +38,7 @@ class KelolaKategoriPage extends StatelessWidget {
                         backgroundImage: NetworkImage(
                           'http://10.0.2.2:8000/files/${kategori.urlGambar}',
                         ),
-                        onBackgroundImageError:
-                            (_, __) {}, 
+                        onBackgroundImageError: (_, __) {},
                         child:
                             kategori.urlGambar == null
                                 ? const Icon(Icons.category)
@@ -55,12 +56,58 @@ class KelolaKategoriPage extends StatelessWidget {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.edit, color: Colors.blue),
-                            onPressed: () {
+                            onPressed: () async {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (_) => EditKategoriPage(
+                                        kategoriToEdit: kategori,
+                                      ),
+                                ),
+                              );
+                              if (result == true && context.mounted) {
+                                context.read<KategoriBloc>().add(
+                                  FetchKategori(),
+                                );
+                              }
                             },
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete, color: Colors.red),
                             onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder:
+                                    (dialogContext) => AlertDialog(
+                                      title: const Text('Konfirmasi Hapus'),
+                                      content: Text(
+                                        'Yakin ingin menghapus kategori "${kategori.nama}"? Semua materi di dalamnya juga akan terhapus.',
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed:
+                                              () =>
+                                                  Navigator.pop(dialogContext),
+                                          child: const Text('Batal'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            context.read<KategoriBloc>().add(
+                                              DeleteKategori(
+                                                kategoriId: kategori.id,
+                                              ),
+                                            );
+                                            Navigator.pop(dialogContext);
+                                          },
+                                          child: const Text(
+                                            'Ya, Hapus',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                              );
                             },
                           ),
                         ],
@@ -76,7 +123,11 @@ class KelolaKategoriPage extends StatelessWidget {
           },
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
+          onPressed: () async {
+            final result = await Navigator.push(context, MaterialPageRoute(builder: (_) => const TambahKategoriPage()));
+            if (result == true && context.mounted) {
+              context.read<KategoriBloc>().add(FetchKategori());
+            }
           },
           child: const Icon(Icons.add),
         ),
