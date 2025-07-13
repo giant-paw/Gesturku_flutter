@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gesturku_app/ui/admin/pages/tambah_materi_page.dart';
 import '../../../bloc/kelola_materi/kelola_materi_bloc.dart';
 import '../../../repositories/materi_repository.dart';
 
@@ -9,13 +10,12 @@ class KelolaMateriPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => KelolaMateriBloc(
-        materiRepository: RepositoryProvider.of<MateriRepository>(context),
-      )..add(FetchAllMateri()),
+      create:
+          (context) => KelolaMateriBloc(
+            materiRepository: RepositoryProvider.of<MateriRepository>(context),
+          )..add(FetchAllMateri()),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Kelola Semua Materi'),
-        ),
+        appBar: AppBar(title: const Text('Kelola Semua Materi')),
         body: BlocBuilder<KelolaMateriBloc, KelolaMateriState>(
           builder: (context, state) {
             if (state is KelolaMateriLoading) {
@@ -26,22 +26,28 @@ class KelolaMateriPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final materi = state.materi[index];
                   return Card(
-                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 6,
+                    ),
                     child: ListTile(
-                      title: Text(materi.nama, style: const TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: Text('Kategori: ${materi.kategori?.nama ?? 'N/A'}'),
+                      title: Text(
+                        materi.nama,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        'Kategori: ${materi.kategori?.nama ?? 'N/A'}',
+                      ),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
                             icon: const Icon(Icons.edit, color: Colors.blue),
-                            onPressed: () {
-                            },
+                            onPressed: () {},
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: () {
-                            },
+                            onPressed: () {},
                           ),
                         ],
                       ),
@@ -57,6 +63,10 @@ class KelolaMateriPage extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const TambahMateriPage()),
+            );
           },
           child: const Icon(Icons.add),
         ),
