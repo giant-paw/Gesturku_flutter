@@ -11,16 +11,33 @@ class KategoriBloc extends Bloc<KategoriEvent, KategoriState> {
 
   KategoriBloc({required this.kategoriRepository}) : super(KategoriInitial()) {
     on<FetchKategori>(_onFetchKategori);
+    on<DeleteKategori>(_onDeleteKategori);
   }
 
-  void _onFetchKategori(FetchKategori event, Emitter<KategoriState> emit) async {
+  void _onFetchKategori(
+    FetchKategori event,
+    Emitter<KategoriState> emit,
+  ) async {
     emit(KategoriLoading());
     try {
-      final List<Kategori> kategoriList = await kategoriRepository.fetchKategori();
+      final List<Kategori> kategoriList =
+          await kategoriRepository.fetchKategori();
 
       emit(KategoriLoaded(kategori: kategoriList));
     } catch (e) {
       emit(KategoriError(message: e.toString()));
+    }
+  }
+
+  void _onDeleteKategori(
+    DeleteKategori event,
+    Emitter<KategoriState> emit,
+  ) async {
+    try {
+      await kategoriRepository.deleteKategori(event.kategoriId);
+      add(FetchKategori());
+    } catch (e) {
+      emit(KategoriError(message: 'Gagal menghapus kategori: ${e.toString()}'));
     }
   }
 }
